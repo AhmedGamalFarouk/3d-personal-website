@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ContactButton } from '../components/ContactButton';
 import { Magnet } from '../components/Magnet';
-import { DeveloperBadge } from '../components/DeveloperBadge';
 
 export const HeroSection: React.FC = () => {
   const navItems = [
@@ -49,21 +48,26 @@ export const HeroSection: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* HERO PORTRAIT / CENTERPIECE (ABS POSITIONED) */}
+      {/* HERO PORTRAIT / CENTERPIECE (3D AVATAR HEAD & MAGNET EFFECT) */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className="absolute left-1/2 -translate-x-1/2 top-[46%] -translate-y-1/2 z-10 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] pointer-events-auto"
+        className="absolute left-1/2 -translate-x-1/2 z-10 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] top-1/2 -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-auto object-contain flex justify-center items-center"
       >
         <Magnet
           padding={150}
           strength={3}
           activeTransition="transform 0.3s ease-out"
           inactiveTransition="transform 0.6s ease-in-out"
-          className="w-full"
+          className="w-full flex items-center justify-center"
         >
-          <DeveloperBadge />
+          <img
+            src="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png"
+            alt="Ahmed Gamal Farouk 3D Avatar Head"
+            loading="eager"
+            className="w-full h-auto object-contain filter drop-shadow-[0_25px_60px_rgba(118,33,176,0.35)] select-none"
+          />
         </Magnet>
       </motion.div>
 
