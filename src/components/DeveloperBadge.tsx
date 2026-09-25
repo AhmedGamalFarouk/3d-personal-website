@@ -3,13 +3,18 @@ import { Code2, Smartphone, Terminal, Cpu, Sparkles, Layers, Zap, Award } from '
 
 export const DeveloperBadge: React.FC = () => {
   return (
-    <div className="relative group w-full select-none cursor-pointer">
+    <div className="relative group w-full select-none rounded-[28px] sm:rounded-[36px]" data-cursor="hover">
       {/* Background Neon Aura */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 rounded-[32px] sm:rounded-[40px] blur-xl opacity-50 group-hover:opacity-85 transition duration-700 group-hover:duration-200 animate-pulse"></div>
+      <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 rounded-[32px] sm:rounded-[40px] blur-2xl opacity-40 group-hover:opacity-75 transition-opacity duration-700"></div>
+
+      {/* Rotating gradient rim */}
+      <div className="absolute -inset-px rounded-[29px] sm:rounded-[37px] overflow-hidden">
+        <div className="absolute inset-[-100%] animate-spin-slow bg-[conic-gradient(from_0deg,transparent_0deg,#B600A8_60deg,#22d3ee_120deg,transparent_180deg,transparent_360deg)] opacity-70" />
+      </div>
 
       {/* Main Glass Card */}
-      <div className="relative bg-[#121318]/90 backdrop-blur-2xl border border-white/15 rounded-[28px] sm:rounded-[36px] p-5 sm:p-7 md:p-8 shadow-2xl overflow-hidden text-left transition-transform duration-500">
-        
+      <div className="relative bg-[#101116]/[0.93] backdrop-blur-2xl border border-white/10 rounded-[28px] sm:rounded-[36px] p-5 sm:p-7 md:p-8 shadow-2xl overflow-hidden text-left">
+
         {/* Subtle grid pattern background overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
 

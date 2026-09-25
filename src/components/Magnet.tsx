@@ -1,69 +1,50 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 interface MagnetProps {
   children: React.ReactNode;
   padding?: number;
   strength?: number;
-  activeTransition?: string;
-  inactiveTransition?: string;
   className?: string;
 }
 
-export const Magnet: React.FC<MagnetProps> = ({
-  children,
-  padding = 150,
-  strength = 3,
-  activeTransition = 'transform 0.3s ease-out',
-  inactiveTransition = 'transform 0.6s ease-in-out',
-  className = '',
-}) => {
+/**
+ * Pulls its children toward the cursor when it is within `padding` px of the element.
+ * Driven by springs on motion values, so it never re-renders React on mouse move.
+ */
+export const Magnet: React.FC<MagnetProps> = ({ children, padding = 80, strength = 3, className = '' }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 180, damping: 16, mass: 0.4 });
+  const springY = useSpring(y, { stiffness: 180, damping: 16, mass: 0.4 });
 
   useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const distanceX = e.clientX - centerX;
-      const distanceY = e.clientY - centerY;
-      const distance = Math.hypot(distanceX, distanceY);
-
-      // Check if cursor is within magnetic radius (rect bounds + padding)
+      const distanceX = e.clientX - (rect.left + rect.width / 2);
+      const distanceY = e.clientY - (rect.top + rect.height / 2);
       const radius = Math.max(rect.width, rect.height) / 2 + padding;
 
-      if (distance < radius) {
-        setIsHovered(true);
-        setPosition({
-          x: distanceX / strength,
-          y: distanceY / strength,
-        });
+      if (Math.hypot(distanceX, distanceY) < radius) {
+        x.set(distanceX / strength);
+        y.set(distanceY / strength);
       } else {
-        setIsHovered(false);
-        setPosition({ x: 0, y: 0 });
+        x.set(0);
+        y.set(0);
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [padding, strength]);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [padding, strength, x, y]);
 
   return (
-    <div
-      ref={ref}
-      className={`inline-block ${className}`}
-      style={{
-        transform: `translate3d(${position.x}px, ${position.y}px, 0px)`,
-        transition: isHovered ? activeTransition : inactiveTransition,
-        willChange: 'transform',
-      }}
-    >
+    <motion.div ref={ref} className={`inline-block ${className}`} style={{ x: springX, y: springY }}>
       {children}
-    </div>
+    </motion.div>
   );
 };
